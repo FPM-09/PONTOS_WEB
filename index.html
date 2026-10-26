@@ -11,8 +11,8 @@
 
   <style>
     :root {
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
+      --primary: #006443;
+      --primary-hover: #006443;
       --bg-main: #f8fafc;
       --card-bg: #ffffff;
       --text-main: #1e293b;
@@ -38,7 +38,7 @@
     }
 
     header {
-      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      background: linear-gradient(135deg, #1e1b4b 0%, #006443 100%);
       color: white;
       padding: 2rem 1rem;
       text-align: center;
@@ -101,7 +101,7 @@
     /* Barra de Filtros */
     .filters-bar {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
       background: var(--card-bg);
       padding: 1.25rem;
@@ -269,8 +269,6 @@
 </head>
 <body>
 
-
-
   <header>
     <div class="brand-header">
       <svg class="brand-logo" viewBox="0 0 120 120" role="img" aria-label="Ilustração de dois atabaques" xmlns="http://www.w3.org/2000/svg">
@@ -310,13 +308,14 @@
       <button class="tab-btn" onclick="mudarAba('orientacoes', event)"><i class="fa-solid fa-compass"></i> Orientações</button>
     </nav>
 
-    <!-- AB 1: ÍNDICE DIREITA -->
+    <!-- ABA 1: ÍNDICE DIREITA -->
     <section id="indice-direita" class="tab-pane active">
       <div class="filters-bar" id="filtros-indice">
         <div class="filters-title">Filtros do Índice Direita</div>
         <div class="filter-group"><label for="indice-linha">Linha</label><select id="indice-linha" onchange="filtrarDados()"><option value="">Todas as Linhas</option></select></div>
         <div class="filter-group"><label for="indice-evento">Evento</label><select id="indice-evento" onchange="filtrarDados()"><option value="">Todos os Eventos</option></select></div>
         <div class="filter-group"><label for="indice-toque">Toque</label><select id="indice-toque" onchange="filtrarDados()"><option value="">Todos os Toques</option></select></div>
+        <div class="filter-group"><label for="indice-pg">Página (PG)</label><select id="indice-pg" onchange="filtrarDados()"><option value="">Todas as Páginas</option></select></div>
         <button type="button" class="clear-filters-btn" onclick="limparFiltros('indice')"><i class="fa-solid fa-eraser" aria-hidden="true"></i> Limpar filtros</button>
       </div>
       <div class="table-responsive">
@@ -345,6 +344,7 @@
         <div class="filter-group"><label for="direita-linha">Linha</label><select id="direita-linha" onchange="filtrarDados()"><option value="">Todas as Linhas</option></select></div>
         <div class="filter-group"><label for="direita-evento">Evento</label><select id="direita-evento" onchange="filtrarDados()"><option value="">Todos os Eventos</option></select></div>
         <div class="filter-group"><label for="direita-toque">Toque</label><select id="direita-toque" onchange="filtrarDados()"><option value="">Todos os Toques</option></select></div>
+        <div class="filter-group"><label for="direita-pg">Página (PG)</label><select id="direita-pg" onchange="filtrarDados()"><option value="">Todas as Páginas</option></select></div>
         <button type="button" class="clear-filters-btn" onclick="limparFiltros('direita')"><i class="fa-solid fa-eraser" aria-hidden="true"></i> Limpar filtros</button>
       </div>
       <div class="table-responsive">
@@ -410,10 +410,7 @@
   </div>
 
   <script>
-  // URLs CSV das quatro abas do Google Sheets.
-  // As abas precisam estar publicadas na Web ou acessíveis para leitura.
-  const URL_INDICE_DIREITA = 'https://docs.google.com/spreadsheets/d/162V5symdp6T3MGPtoiF5CVgb2mQtVm3WUm9FBvtnSXQ/export?format=csv&gid=530446040';
-  const URL_DIREITA_COMPLETO = 'https://docs.google.com/spreadsheets/d/162V5symdp6T3MGPtoiF5CVgb2mQtVm3WUm9FBvtnSXQ/export?format=csv&gid=1439144672';
+  const URL_INDICE_DIREITA = 'https://docs.google.com/spreadsheets/d/162V5symdp6T3MGPtoiF5CVgb2mQtVm3WUm9FBvtnSXQ/export?format=csv&gid=530446040';  
   const URL_ESQUERDA = 'https://docs.google.com/spreadsheets/d/162V5symdp6T3MGPtoiF5CVgb2mQtVm3WUm9FBvtnSXQ/export?format=csv&gid=1171864590';
   const URL_ORIENTACOES = 'https://docs.google.com/spreadsheets/d/162V5symdp6T3MGPtoiF5CVgb2mQtVm3WUm9FBvtnSXQ/export?format=csv&gid=918801849';
 
@@ -434,7 +431,6 @@
     filtrarDados();
   }
 
-  // Leitor CSV que respeita vírgulas, aspas e quebras de linha dentro das células.
   function parseCSV(texto) {
     const linhas = [];
     let linha = [], campo = '', entreAspas = false;
@@ -497,10 +493,6 @@
     return '';
   }
 
-  // Usa JSONP do Google Visualization em vez de fetch(CSV).
-  // Isso evita o bloqueio CORS que costuma ocorrer quando o HTML é aberto
-  // diretamente do computador (file://) ou hospedado em outro domínio.
-  // O endpoint gviz usa um callback global; por isso, as consultas são enfileiradas.
   let filaConsultasGoogle = Promise.resolve();
   function buscarPlanilha(url, nome) {
     const tarefa = filaConsultasGoogle.then(() => buscarPlanilhaGviz(url, nome));
@@ -596,6 +588,7 @@
 
   function preencherSelect(id, valores, textoInicial) {
     const select = document.getElementById(id);
+    if (!select) return;
     const anterior = select.value;
     select.replaceChildren();
     const padrao = document.createElement('option');
@@ -603,8 +596,13 @@
     padrao.textContent = textoInicial;
     select.appendChild(padrao);
 
+    // Ordenação numérica se os valores forem números de página
     [...new Set(valores.map(v => String(v || '').trim()).filter(Boolean))]
-      .sort((a, b) => a.localeCompare(b, 'pt-BR'))
+      .sort((a, b) => {
+        const numA = Number(a), numB = Number(b);
+        if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+        return a.localeCompare(b, 'pt-BR');
+      })
       .forEach(valor => {
         const opt = document.createElement('option');
         opt.value = valor;
@@ -626,16 +624,23 @@
     preencherSelect(`${prefixo}-linha`, dados.map(x => x.linha), 'Todas as Linhas');
     preencherSelect(`${prefixo}-evento`, dados.map(x => x.evento), 'Todos os Eventos');
     preencherSelect(`${prefixo}-toque`, dados.map(x => x.toque), 'Todos os Toques');
+    const seletorPg = document.getElementById(`${prefixo}-pg`);
+    if (seletorPg) {
+      preencherSelect(`${prefixo}-pg`, dados.map(x => x.pg), 'Todas as Páginas');
+    }
   }
 
   function filtrarLista(dados, prefixo) {
-    const linha = document.getElementById(`${prefixo}-linha`).value;
-    const evento = document.getElementById(`${prefixo}-evento`).value;
-    const toque = document.getElementById(`${prefixo}-toque`).value;
+    const linha = document.getElementById(`${prefixo}-linha`)?.value || '';
+    const evento = document.getElementById(`${prefixo}-evento`)?.value || '';
+    const toque = document.getElementById(`${prefixo}-toque`)?.value || '';
+    const pg = document.getElementById(`${prefixo}-pg`)?.value || '';
+
     return dados.filter(item =>
       (!linha || item.linha === linha) &&
       (!evento || item.evento === evento) &&
-      (!toque || item.toque === toque)
+      (!toque || item.toque === toque) &&
+      (!pg || item.pg === pg)
     );
   }
 
@@ -730,8 +735,8 @@
 
   function limparFiltros(prefixo) {
     const idsPorAba = {
-      indice: ['indice-linha', 'indice-evento', 'indice-toque'],
-      direita: ['direita-linha', 'direita-evento', 'direita-toque'],
+      indice: ['indice-linha', 'indice-evento', 'indice-toque', 'indice-pg'],
+      direita: ['direita-linha', 'direita-evento', 'direita-toque', 'direita-pg'],
       esquerda: ['esquerda-linha', 'esquerda-evento', 'esquerda-toque'],
       orientacoes: ['orientacoes-categoria', 'orientacoes-titulo']
     };
@@ -789,7 +794,7 @@
   async function inicializarPortal() {
     const tarefas = await Promise.allSettled([
       buscarPlanilha(URL_INDICE_DIREITA, 'Índice Direita'),
-      buscarPlanilha(URL_DIREITA_COMPLETO, 'Direita Completo'),
+      buscarPlanilha(URL_INDICE_DIREITA, 'Direita Completo'),
       buscarPlanilha(URL_ESQUERDA, 'Esquerda'),
       buscarPlanilha(URL_ORIENTACOES, 'Orientações')
     ]);
