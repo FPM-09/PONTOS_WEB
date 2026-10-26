@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pontos Direita e Esquerda - Umbanda</title>
+  
+  <!-- Google Fonts & FontAwesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg-main: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 12px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    .container {
+      max-width: 1280px;
+      width: 100%;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      flex: 1;
+    }
+
+    /* Navegação por Abas */
+    .tabs-nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.75rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .tab-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .tab-btn.active {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+
+    /* Barra de Filtros */
+    .filters-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      background: var(--card-bg);
+      padding: 1.25rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-group label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+      color: var(--text-muted);
+    }
+
+    .filter-group select {
+      padding: 0.65rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #f8fafc;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .filter-group select:focus {
+      border-color: var(--primary);
+      background: #fff;
+    }
+
+    /* Conteúdo das Abas */
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Estilização de Tabelas Modernas */
+    .table-responsive {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #334155;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 1rem;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-main);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: #f8fafc;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .ponto-texto {
+      white-space: pre-line;
+      line-height: 1.6;
+    }
+
+    /* Grid de Orientações */
+    .orientacoes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .orientacao-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+    }
+
+    .orientacao-card h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.75rem;
+    }
+
+    .orientacao-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Estado de Carregamento */
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+
+    .loading i {
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .brand-header { display:flex; align-items:center; justify-content:center; gap:1.25rem; max-width:1100px; margin:0 auto; }
+    .brand-logo { width:104px; height:104px; flex:0 0 auto; filter: drop-shadow(0 5px 10px rgba(0,0,0,.22)); }
+    .brand-copy { text-align:left; }
+    .brand-copy h1 { font-size:clamp(1.45rem, 3vw, 2rem); line-height:1.2; margin-bottom:.55rem; }
+    .brand-copy p { color:#c7d2fe; font-size:.95rem; }
+    .filters-bar { margin-bottom:1.25rem; }
+    .filters-title { grid-column:1/-1; font-size:.9rem; font-weight:700; color:var(--text-main); }
+    .clear-filters-btn { justify-self:start; align-self:end; display:inline-flex; align-items:center; gap:.5rem; padding:.68rem 1rem; border:1px solid var(--border); border-radius:8px; background:#fff; color:var(--text-main); font-size:.9rem; font-weight:600; cursor:pointer; transition:background .2s,border-color .2s,color .2s; }
+    .clear-filters-btn:hover { background:#eef2ff; border-color:var(--primary); color:var(--primary); }
+    .clear-filters-btn:focus-visible { outline:3px solid rgba(79,70,229,.3); outline-offset:2px; }
+    @media (max-width:600px) { .brand-header { flex-direction:column; gap:.5rem; } .brand-logo { width:78px; height:78px; } .brand-copy { text-align:center; } }
+
+  </style>
+</head>
+<body>
+
+
+
+  <header>
+    <div class="brand-header">
+      <svg class="brand-logo" viewBox="0 0 120 120" role="img" aria-label="Ilustração de dois atabaques" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="wood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7c2d12"/><stop offset=".28" stop-color="#c87935"/><stop offset=".58" stop-color="#9a4b22"/><stop offset="1" stop-color="#5b2618"/></linearGradient>
+          <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3d6"/><stop offset="1" stop-color="#d9b982"/></linearGradient>
+        </defs>
+        <ellipse cx="60" cy="105" rx="42" ry="7" fill="#0b1028" opacity=".4"/>
+        <g transform="translate(6 9) rotate(-7 35 58)">
+          <path d="M17 28 Q35 22 53 28 L48 86 Q35 94 22 86 Z" fill="url(#wood)" stroke="#f4c27a" stroke-width="2"/>
+          <ellipse cx="35" cy="28" rx="18" ry="7" fill="url(#skin)" stroke="#f4c27a" stroke-width="2"/>
+          <path d="M19 39 Q35 46 51 39 M20 52 Q35 59 50 52 M21 66 Q35 73 49 66 M22 80 Q35 87 48 80" fill="none" stroke="#f4c27a" stroke-width="2.5"/>
+          <ellipse cx="35" cy="88" rx="13" ry="4" fill="#4b2117" stroke="#f4c27a" stroke-width="1.5"/>
+        </g>
+        <g transform="translate(51 0) rotate(7 28 60)">
+          <path d="M12 31 Q30 24 48 31 L43 91 Q30 99 17 91 Z" fill="url(#wood)" stroke="#f4c27a" stroke-width="2"/>
+          <ellipse cx="30" cy="31" rx="18" ry="7" fill="url(#skin)" stroke="#f4c27a" stroke-width="2"/>
+          <path d="M14 43 Q30 50 46 43 M15 57 Q30 64 45 57 M16 71 Q30 78 44 71 M17 84 Q30 91 43 84" fill="none" stroke="#f4c27a" stroke-width="2.5"/>
+          <ellipse cx="30" cy="93" rx="13" ry="4" fill="#4b2117" stroke="#f4c27a" stroke-width="1.5"/>
+        </g>
+        <path d="M8 19 Q60 -2 112 19" fill="none" stroke="#f4c27a" stroke-width="2" opacity=".9"/>
+      </svg>
+      <div class="brand-copy">
+        <h1>Portal de Pontos - Direita e Esquerda</h1>
+        <p>Consulta de pontos e orientações da Umbanda</p>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Navegação Superior -->
+    <nav class="tabs-nav">
+      <button class="tab-btn active" onclick="mudarAba('indice-direita', event)"><i class="fa-solid fa-list-ol"></i> Índice Direita</button>
+      <button class="tab-btn" onclick="mudarAba('direita', event)"><i class="fa-solid fa-star-of-david"></i> Direita (Completo)</button>
+      <button class="tab-btn" onclick="mudarAba('esquerda', event)"><i class="fa-solid fa-skull-crossbones"></i> Esquerda</button>
+      <button class="tab-btn" onclick="mudarAba('orientacoes', event)"><i class="fa-solid fa-compass"></i> Orientações</button>
+    </nav>
+
+    <!-- AB 1: ÍNDICE DIREITA -->
+    <section id="indice-direita" class="tab-pane active">
+      <div class="filters-bar" id="filtros-indice">
+        <div class="filters-title">Filtros do Índice Direita</div>
+        <div class="filter-group"><label for="indice-linha">Linha</label><select id="indice-linha" onchange="filtrarDados()"><option value="">Todas as Linhas</option></select></div>
+        <div class="filter-group"><label for="indice-evento">Evento</label><select id="indice-evento" onchange="filtrarDados()"><option value="">Todos os Eventos</option></select></div>
+        <div class="filter-group"><label for="indice-toque">Toque</label><select id="indice-toque" onchange="filtrarDados()"><option value="">Todos os Toques</option></select></div>
+        <button type="button" class="clear-filters-btn" onclick="limparFiltros('indice')"><i class="fa-solid fa-eraser" aria-hidden="true"></i> Limpar filtros</button>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th class="text-center" style="width: 60px;">#</th>
+              <th>Linha</th>
+              <th>Evento</th>
+              <th>Toque</th>
+              <th>Trecho (Início)</th>
+              <th class="text-center">PG</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-indice-corpo">
+            <tr><td colspan="6" class="loading"><i class="fa-solid fa-spinner"></i> Carregando dados da planilha...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ABA 2: DIREITA COMPLETA -->
+    <section id="direita" class="tab-pane">
+      <div class="filters-bar" id="filtros-direita">
+        <div class="filters-title">Filtros da Direita (Completo)</div>
+        <div class="filter-group"><label for="direita-linha">Linha</label><select id="direita-linha" onchange="filtrarDados()"><option value="">Todas as Linhas</option></select></div>
+        <div class="filter-group"><label for="direita-evento">Evento</label><select id="direita-evento" onchange="filtrarDados()"><option value="">Todos os Eventos</option></select></div>
+        <div class="filter-group"><label for="direita-toque">Toque</label><select id="direita-toque" onchange="filtrarDados()"><option value="">Todos os Toques</option></select></div>
+        <button type="button" class="clear-filters-btn" onclick="limparFiltros('direita')"><i class="fa-solid fa-eraser" aria-hidden="true"></i> Limpar filtros</button>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th class="text-center" style="width: 60px;">#</th>
+              <th>Linha</th>
+              <th>Evento</th>
+              <th>Toque</th>
+              <th>Ponto Completo</th>
+              <th class="text-center">PG</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-direita-corpo">
+            <tr><td colspan="6" class="loading"><i class="fa-solid fa-spinner"></i> Carregando dados da planilha...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ABA 3: ESQUERDA -->
+    <section id="esquerda" class="tab-pane">
+      <div class="filters-bar" id="filtros-esquerda">
+        <div class="filters-title">Filtros da Esquerda</div>
+        <div class="filter-group"><label for="esquerda-linha">Linha</label><select id="esquerda-linha" onchange="filtrarDados()"><option value="">Todas as Linhas</option></select></div>
+        <div class="filter-group"><label for="esquerda-evento">Evento</label><select id="esquerda-evento" onchange="filtrarDados()"><option value="">Todos os Eventos</option></select></div>
+        <div class="filter-group"><label for="esquerda-toque">Toque</label><select id="esquerda-toque" onchange="filtrarDados()"><option value="">Todos os Toques</option></select></div>
+        <button type="button" class="clear-filters-btn" onclick="limparFiltros('esquerda')"><i class="fa-solid fa-eraser" aria-hidden="true"></i> Limpar filtros</button>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th class="text-center" style="width: 60px;">#</th>
+              <th>Linha / Categoria</th>
+              <th>Evento / Descrição</th>
+              <th>Toque</th>
+              <th>Conteúdo</th>
+              <th class="text-center">PG</th>
+            </tr>
+          </thead>
+          <tbody id="tabela-esquerda-corpo">
+            <tr><td colspan="6" class="loading"><i class="fa-solid fa-spinner"></i> Carregando dados da planilha...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ABA 4: ORIENTAÇÕES -->
+    <section id="orientacoes" class="tab-pane">
+      <div class="filters-bar" id="filtros-orientacoes">
+        <div class="filters-title">Filtros das Orientações</div>
+        <div class="filter-group"><label for="orientacoes-categoria">Categoria</label><select id="orientacoes-categoria" onchange="filtrarDados()"><option value="">Todas as Categorias</option></select></div>
+        <div class="filter-group"><label for="orientacoes-titulo">Título</label><select id="orientacoes-titulo" onchange="filtrarDados()"><option value="">Todos os Títulos</option></select></div>
+        <button type="button" class="clear-filters-btn" onclick="limparFiltros('orientacoes')"><i class="fa-solid fa-eraser" aria-hidden="true"></i> Limpar filtros</button>
+      </div>
+      <div class="orientacoes-grid" id="grid-orientacoes">
+        <div class="loading" style="grid-column: 1 / -1;"><i class="fa-solid fa-spinner"></i> Carregando orientações...</div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+  // URLs CSV das quatro abas do Google Sheets.
+  // As abas precisam estar publicadas na Web ou acessíveis para leitura.
+  const URL_INDICE_DIREITA = 'https://docs.google.com/spreadsheets/d/162V5symdp6T3MGPtoiF5CVgb2mQtVm3WUm9FBvtnSXQ/export?format=csv&gid=530446040';
+  const URL_DIREITA_COMPLETO = 'https://docs.google.com/spreadsheets/d/162V5symdp6T3MGPtoiF5CVgb2mQtVm3WUm9FBvtnSXQ/export?format=csv&gid=1439144672';
+  const URL_ESQUERDA = 'https://docs.google.com/spreadsheets/d/162V5symdp6T3MGPtoiF5CVgb2mQtVm3WUm9FBvtnSXQ/export?format=csv&gid=1171864590';
+  const URL_ORIENTACOES = 'https://docs.google.com/spreadsheets/d/162V5symdp6T3MGPtoiF5CVgb2mQtVm3WUm9FBvtnSXQ/export?format=csv&gid=918801849';
+
+  let dadosIndiceDireita = [];
+  let dadosGlobaisDireita = [];
+  let dadosGlobaisEsquerda = [];
+  let dadosOrientacoes = [];
+  let abaAtual = 'indice-direita';
+
+  function mudarAba(idAba, evento) {
+    document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(idAba).classList.add('active');
+    const botao = evento?.currentTarget || document.querySelector(`.tab-btn[onclick*="${idAba}"]`);
+    if (botao) botao.classList.add('active');
+    abaAtual = idAba;
+
+    filtrarDados();
+  }
+
+  // Leitor CSV que respeita vírgulas, aspas e quebras de linha dentro das células.
+  function parseCSV(texto) {
+    const linhas = [];
+    let linha = [], campo = '', entreAspas = false;
+
+    texto = texto.replace(/^\uFEFF/, '');
+    for (let i = 0; i < texto.length; i++) {
+      const ch = texto[i];
+      const prox = texto[i + 1];
+
+      if (ch === '"') {
+        if (entreAspas && prox === '"') {
+          campo += '"';
+          i++;
+        } else {
+          entreAspas = !entreAspas;
+        }
+      } else if (ch === ',' && !entreAspas) {
+        linha.push(campo);
+        campo = '';
+      } else if ((ch === '\n' || ch === '\r') && !entreAspas) {
+        if (ch === '\r' && prox === '\n') i++;
+        linha.push(campo);
+        if (linha.some(v => v.trim() !== '')) linhas.push(linha);
+        linha = [];
+        campo = '';
+      } else {
+        campo += ch;
+      }
+    }
+
+    if (campo.length || linha.length) {
+      linha.push(campo);
+      if (linha.some(v => v.trim() !== '')) linhas.push(linha);
+    }
+    if (!linhas.length) return [];
+
+    const cabecalhos = linhas.shift().map(c => normalizarCabecalho(c));
+    return linhas.map(valores => {
+      const item = {};
+      cabecalhos.forEach((cab, i) => item[cab] = (valores[i] ?? '').trim());
+      return item;
+    });
+  }
+
+  function normalizarCabecalho(valor) {
+    return String(valor ?? '')
+      .replace(/^\uFEFF/, '')
+      .trim()
+      .toLocaleLowerCase('pt-BR')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '_');
+  }
+
+  function campo(item, ...nomes) {
+    for (const nome of nomes) {
+      const valor = item[normalizarCabecalho(nome)];
+      if (valor !== undefined && valor !== null && valor !== '') return valor;
+    }
+    return '';
+  }
+
+  // Usa JSONP do Google Visualization em vez de fetch(CSV).
+  // Isso evita o bloqueio CORS que costuma ocorrer quando o HTML é aberto
+  // diretamente do computador (file://) ou hospedado em outro domínio.
+  // O endpoint gviz usa um callback global; por isso, as consultas são enfileiradas.
+  let filaConsultasGoogle = Promise.resolve();
+  function buscarPlanilha(url, nome) {
+    const tarefa = filaConsultasGoogle.then(() => buscarPlanilhaGviz(url, nome));
+    filaConsultasGoogle = tarefa.catch(() => {});
+    return tarefa;
+  }
+
+  function buscarPlanilhaGviz(url, nome) {
+    return new Promise((resolve, reject) => {
+      let planilhaUrl;
+      try { planilhaUrl = new URL(url); }
+      catch { reject(new Error(`${nome}: URL inválida.`)); return; }
+
+      const match = planilhaUrl.pathname.match(/\/spreadsheets\/d\/([^/]+)/);
+      const id = match && match[1];
+      const gid = planilhaUrl.searchParams.get('gid');
+      if (!id || !gid) {
+        reject(new Error(`${nome}: não foi possível identificar o ID da planilha e o gid da aba.`));
+        return;
+      }
+
+      const script = document.createElement('script');
+      let finalizado = false;
+      const timer = setTimeout(() => concluir(new Error(
+        `${nome}: tempo esgotado. Confira se a planilha está publicada na Web ou acessível para leitura.`
+      )), 15000);
+
+      function limpar() {
+        clearTimeout(timer);
+        script.remove();
+        try { delete window.google.visualization.Query.setResponse; } catch (_) {}
+      }
+      function concluir(erro, dados) {
+        if (finalizado) return;
+        finalizado = true;
+        limpar();
+        if (erro) reject(erro); else resolve(dados);
+      }
+
+      window.google = window.google || {};
+      window.google.visualization = window.google.visualization || {};
+      window.google.visualization.Query = window.google.visualization.Query || {};
+      window.google.visualization.Query.setResponse = (resposta) => {
+        if (!resposta || resposta.status === 'error') {
+          const detalhe = resposta?.errors?.map(e => e.detailed_message || e.message).join('; ');
+          concluir(new Error(`${nome}: o Google recusou a consulta${detalhe ? ` — ${detalhe}` : ''}. Confira a publicação/permissão.`));
+          return;
+        }
+        const tabela = resposta.table;
+        if (!tabela || !Array.isArray(tabela.cols) || !Array.isArray(tabela.rows)) {
+          concluir(new Error(`${nome}: resposta da planilha em formato inesperado.`));
+          return;
+        }
+        const cabecalhos = tabela.cols.map((col, i) => normalizarCabecalho(col.label || col.id || `coluna_${i + 1}`));
+        const dados = tabela.rows.map(linha => {
+          const item = {};
+          cabecalhos.forEach((cab, i) => {
+            const celula = linha.c?.[i];
+            item[cab] = celula ? String(celula.f ?? celula.v ?? '').trim() : '';
+          });
+          return item;
+        }).filter(item => Object.values(item).some(v => v !== ''));
+        if (!dados.length) {
+          concluir(new Error(`${nome}: nenhum registro encontrado. Confira se a aba contém dados abaixo dos cabeçalhos.`));
+          return;
+        }
+        concluir(null, dados);
+      };
+      script.onerror = () => concluir(new Error(
+        `${nome}: não foi possível acessar a aba. Publique a planilha na Web (Arquivo > Compartilhar/Publicar na Web) e tente novamente.`
+      ));
+      script.src = `https://docs.google.com/spreadsheets/d/${encodeURIComponent(id)}/gviz/tq?gid=${encodeURIComponent(gid)}&headers=1&tqx=out:json`;
+      document.head.appendChild(script);
+    });
+  }
+
+  function mapearPonto(item, origem) {
+    return {
+      linha: campo(item, 'LINHA'),
+      evento: campo(item, 'EVENTO'),
+      trecho: campo(item, 'TRECHO'),
+      toque: campo(item, 'TOQUE'),
+      ajustando: campo(item, 'ajustando', 'Ajustando'),
+      completo: campo(item, 'PONTO') || campo(item, 'TRECHO'),
+      pg: campo(item, 'PG_Apostila', 'PG', 'PG Apostila'),
+      categoria: campo(item, 'CATEGORIA'),
+      titulo: campo(item, 'TITULO'),
+      conteudo: campo(item, 'CONTEÚDO', 'CONTEUDO'),
+      descricao: campo(item, 'DESCRIÇÃO', 'DESCRICAO'),
+      origem
+    };
+  }
+
+  function preencherSelect(id, valores, textoInicial) {
+    const select = document.getElementById(id);
+    const anterior = select.value;
+    select.replaceChildren();
+    const padrao = document.createElement('option');
+    padrao.value = '';
+    padrao.textContent = textoInicial;
+    select.appendChild(padrao);
+
+    [...new Set(valores.map(v => String(v || '').trim()).filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, 'pt-BR'))
+      .forEach(valor => {
+        const opt = document.createElement('option');
+        opt.value = valor;
+        opt.textContent = valor;
+        select.appendChild(opt);
+      });
+    if ([...select.options].some(o => o.value === anterior)) select.value = anterior;
+  }
+
+  function popularFiltros() {
+    popularFiltrosPontos('indice', dadosIndiceDireita);
+    popularFiltrosPontos('direita', dadosGlobaisDireita);
+    popularFiltrosPontos('esquerda', dadosGlobaisEsquerda);
+    preencherSelect('orientacoes-categoria', dadosOrientacoes.map(x => x.categoria), 'Todas as Categorias');
+    preencherSelect('orientacoes-titulo', dadosOrientacoes.map(x => x.titulo), 'Todos os Títulos');
+  }
+
+  function popularFiltrosPontos(prefixo, dados) {
+    preencherSelect(`${prefixo}-linha`, dados.map(x => x.linha), 'Todas as Linhas');
+    preencherSelect(`${prefixo}-evento`, dados.map(x => x.evento), 'Todos os Eventos');
+    preencherSelect(`${prefixo}-toque`, dados.map(x => x.toque), 'Todos os Toques');
+  }
+
+  function filtrarLista(dados, prefixo) {
+    const linha = document.getElementById(`${prefixo}-linha`).value;
+    const evento = document.getElementById(`${prefixo}-evento`).value;
+    const toque = document.getElementById(`${prefixo}-toque`).value;
+    return dados.filter(item =>
+      (!linha || item.linha === linha) &&
+      (!evento || item.evento === evento) &&
+      (!toque || item.toque === toque)
+    );
+  }
+
+  function filtrarOrientacoes(dados) {
+    const categoria = document.getElementById('orientacoes-categoria').value;
+    const titulo = document.getElementById('orientacoes-titulo').value;
+    return dados.filter(item =>
+      (!categoria || item.categoria === categoria) &&
+      (!titulo || item.titulo === titulo)
+    );
+  }
+
+  function adicionarCelula(tr, valor, classe = '') {
+    const td = document.createElement('td');
+    if (classe) td.className = classe;
+    td.textContent = valor || '—';
+    tr.appendChild(td);
+    return td;
+  }
+
+  function mostrarEstado(tbodyId, mensagem, colspan = 6) {
+    const tbody = document.getElementById(tbodyId);
+    tbody.replaceChildren();
+    const tr = document.createElement('tr');
+    const td = document.createElement('td');
+    td.colSpan = colspan;
+    td.className = 'text-center';
+    td.textContent = mensagem;
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+  }
+
+  function renderizarIndice(dados) {
+    const corpo = document.getElementById('tabela-indice-corpo');
+    corpo.replaceChildren();
+    if (!dados.length) return mostrarEstado('tabela-indice-corpo', 'Nenhum registro encontrado.');
+    dados.forEach((item, i) => {
+      const tr = document.createElement('tr');
+      adicionarCelula(tr, String(i + 1), 'text-center');
+      const tdLinha = adicionarCelula(tr, item.linha);
+      tdLinha.style.fontWeight = '600';
+      adicionarCelula(tr, item.evento);
+      adicionarCelula(tr, item.toque);
+      adicionarCelula(tr, item.trecho || item.completo);
+      adicionarCelula(tr, item.pg, 'text-center');
+      corpo.appendChild(tr);
+    });
+  }
+
+  function renderizarDireita(dados) {
+    const corpo = document.getElementById('tabela-direita-corpo');
+    corpo.replaceChildren();
+    if (!dados.length) return mostrarEstado('tabela-direita-corpo', 'Nenhum registro encontrado.');
+    dados.forEach((item, i) => {
+      const tr = document.createElement('tr');
+      adicionarCelula(tr, String(i + 1), 'text-center');
+      const tdLinha = adicionarCelula(tr, item.linha);
+      tdLinha.style.fontWeight = '600';
+      adicionarCelula(tr, item.evento);
+      adicionarCelula(tr, item.toque);
+      const tdPonto = document.createElement('td');
+      const texto = document.createElement('div');
+      texto.className = 'ponto-texto';
+      texto.textContent = item.completo || item.trecho || '—';
+      tdPonto.appendChild(texto);
+      tr.appendChild(tdPonto);
+      adicionarCelula(tr, item.pg, 'text-center');
+      corpo.appendChild(tr);
+    });
+  }
+
+  function renderizarEsquerda(dados) {
+    const corpo = document.getElementById('tabela-esquerda-corpo');
+    corpo.replaceChildren();
+    if (!dados.length) return mostrarEstado('tabela-esquerda-corpo', 'Nenhum registro encontrado.');
+    dados.forEach((item, i) => {
+      const tr = document.createElement('tr');
+      adicionarCelula(tr, String(i + 1), 'text-center');
+      adicionarCelula(tr, item.linha);
+      adicionarCelula(tr, item.evento);
+      adicionarCelula(tr, item.toque);
+      const td = document.createElement('td');
+      const texto = document.createElement('div');
+      texto.className = 'ponto-texto';
+      texto.textContent = item.completo || item.trecho || '—';
+      td.appendChild(texto);
+      tr.appendChild(td);
+      adicionarCelula(tr, item.pg, 'text-center');
+      corpo.appendChild(tr);
+    });
+  }
+
+  function limparFiltros(prefixo) {
+    const idsPorAba = {
+      indice: ['indice-linha', 'indice-evento', 'indice-toque'],
+      direita: ['direita-linha', 'direita-evento', 'direita-toque'],
+      esquerda: ['esquerda-linha', 'esquerda-evento', 'esquerda-toque'],
+      orientacoes: ['orientacoes-categoria', 'orientacoes-titulo']
+    };
+    (idsPorAba[prefixo] || []).forEach(id => {
+      const seletor = document.getElementById(id);
+      if (seletor) seletor.value = '';
+    });
+    filtrarDados();
+  }
+
+  function filtrarDados() {
+    renderizarIndice(filtrarLista(dadosIndiceDireita, 'indice'));
+    renderizarDireita(filtrarLista(dadosGlobaisDireita, 'direita'));
+    renderizarEsquerda(filtrarLista(dadosGlobaisEsquerda, 'esquerda'));
+    carregarOrientacoes(filtrarOrientacoes(dadosOrientacoes));
+  }
+
+  function carregarOrientacoes(dados) {
+    const grid = document.getElementById('grid-orientacoes');
+    grid.replaceChildren();
+    dados.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'orientacao-card';
+      const titulo = document.createElement('h3');
+      titulo.textContent = item.titulo || item.categoria || 'Orientação';
+      card.appendChild(titulo);
+      if (item.categoria && item.titulo) {
+        const categoria = document.createElement('p');
+        categoria.style.fontWeight = '600';
+        categoria.style.marginBottom = '0.5rem';
+        categoria.textContent = item.categoria;
+        card.appendChild(categoria);
+      }
+      if (item.conteudo) {
+        const conteudo = document.createElement('p');
+        conteudo.textContent = item.conteudo;
+        card.appendChild(conteudo);
+      }
+      if (item.descricao) {
+        const descricao = document.createElement('p');
+        descricao.style.marginTop = '0.5rem';
+        descricao.textContent = item.descricao;
+        card.appendChild(descricao);
+      }
+      grid.appendChild(card);
+    });
+    if (!dados.length) {
+      const aviso = document.createElement('div');
+      aviso.className = 'loading';
+      aviso.textContent = 'Nenhuma orientação foi encontrada na planilha.';
+      grid.appendChild(aviso);
+    }
+  }
+
+  async function inicializarPortal() {
+    const tarefas = await Promise.allSettled([
+      buscarPlanilha(URL_INDICE_DIREITA, 'Índice Direita'),
+      buscarPlanilha(URL_DIREITA_COMPLETO, 'Direita Completo'),
+      buscarPlanilha(URL_ESQUERDA, 'Esquerda'),
+      buscarPlanilha(URL_ORIENTACOES, 'Orientações')
+    ]);
+
+    const nomes = ['Índice Direita', 'Direita Completo', 'Esquerda', 'Orientações'];
+    const erros = [];
+    tarefas.forEach((resultado, i) => {
+      if (resultado.status === 'rejected') erros.push(`${nomes[i]}: ${resultado.reason?.message || resultado.reason}`);
+    });
+
+    if (tarefas[0].status === 'fulfilled') {
+      dadosIndiceDireita = tarefas[0].value.map(item => mapearPonto(item, 'indice'));
+    } else mostrarEstado('tabela-indice-corpo', 'Não foi possível carregar o índice. Verifique a publicação da aba.');
+
+    if (tarefas[1].status === 'fulfilled') {
+      dadosGlobaisDireita = tarefas[1].value.map(item => mapearPonto(item, 'direita'));
+    } else mostrarEstado('tabela-direita-corpo', 'Não foi possível carregar a aba Direita Completo. Verifique a publicação.');
+
+    if (tarefas[2].status === 'fulfilled') {
+      dadosGlobaisEsquerda = tarefas[2].value.map(item => mapearPonto(item, 'esquerda'));
+    } else mostrarEstado('tabela-esquerda-corpo', 'Não foi possível carregar a aba Esquerda. Verifique a publicação.');
+
+    if (tarefas[3].status === 'fulfilled') {
+      dadosOrientacoes = tarefas[3].value.map(item => mapearPonto(item, 'orientacoes'));
+    } else {
+      dadosOrientacoes = [];
+      const grid = document.getElementById('grid-orientacoes');
+      grid.replaceChildren();
+      const aviso = document.createElement('div');
+      aviso.className = 'loading';
+      aviso.textContent = 'Não foi possível carregar as orientações. Verifique a publicação da aba.';
+      grid.appendChild(aviso);
+    }
+
+    popularFiltros();
+    filtrarDados();
+
+    if (erros.length) {
+      console.error('Falhas ao carregar as planilhas:', erros);
+      const aviso = document.createElement('div');
+      aviso.setAttribute('role', 'alert');
+      aviso.style.cssText = 'margin:0 0 1rem;padding:1rem;border:1px solid #f59e0b;border-radius:8px;background:#fffbeb;color:#92400e;';
+      aviso.textContent = 'Atenção: uma ou mais abas não puderam ser carregadas. Abra o console do navegador (F12) para ver os detalhes. ' + erros.join(' | ');
+      document.querySelector('.container').prepend(aviso);
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', inicializarPortal);
+</script>
+
+</body>
+</html>
